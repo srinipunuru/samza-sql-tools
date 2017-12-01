@@ -1,0 +1,32 @@
+{
+    "name": "ProfileChangeEvent",
+    "version" : 1,
+    "namespace": "com.linkedin.samza.tools.avro",
+    "type": "record",
+    "fields": [
+        {
+            "name": "Name",
+            "doc": "Name of the profile.",
+            "type": ["null", "string"],
+            "default":null
+        },
+        {
+            "name": "NewCompany",
+            "doc": "Name of the new company the person joined.",
+            "type": ["null", "string"],
+            "default":null
+        },
+        {
+            "name": "OldCompany",
+            "doc": "Name of the old company the person was working.",
+            "type": ["null", "string"],
+            "default":null
+        },
+        {
+            "name": "ProfileChangeTimestamp",
+            "doc": "Time at which the profile was changed.",
+            "type": ["null", "long"],
+            "default":null
+        }
+    ]
+}
