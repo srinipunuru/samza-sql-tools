@@ -56,9 +56,9 @@ cd samza-sql-demo-<version>
 ### Generate kafka events
 
 
-Generate kafka events tool is used to insert avro serialized events into kafka topics. Right now it can insert two types of events PageViewEvent <https://github.com/srinipunuru/samza-sql-tools/blob/master/samza-sql-demo/src/main/java/com/linkedin/samza/tools/schemas/PageViewEvent.avsc> and ProfileChangeEvent <https://github.com/srinipunuru/samza-sql-tools/blob/master/samza-sql-demo/src/main/java/com/linkedin/samza/tools/schemas/ProfileChangeEvent.avsc>
+Generate kafka events tool is used to insert avro serialized events into kafka topics. Right now it can insert two types of events [PageViewEvent](https://github.com/srinipunuru/samza-sql-tools/blob/master/samza-sql-demo/src/main/java/com/linkedin/samza/tools/schemas/PageViewEvent.avsc) and [ProfileChangeEvent](https://github.com/srinipunuru/samza-sql-tools/blob/master/samza-sql-demo/src/main/java/com/linkedin/samza/tools/schemas/ProfileChangeEvent.avsc)
 
-Before you can generate kafka events, Please follow instructions here <http://kafka.apache.org/quickstart> to start the zookeeper and kafka server on your local machine.
+Before you can generate kafka events, Please follow instructions [here](http://kafka.apache.org/quickstart) to start the zookeeper and kafka server on your local machine.
 
 You can follow below instructions on how to use Generate kafka events tool.
 
@@ -133,7 +133,7 @@ Once the intellij project files (*.ipr) are created, You can open them using Int
 
 ### Contributing and submitting patches
 
-Contributions are accepted in the form of pull requests, please use this <https://help.github.com/articles/using-pull-requests/> on how to submit the pull request. 
+Contributions are accepted in the form of pull requests, please use [this](https://help.github.com/articles/using-pull-requests/) on how to submit the pull request. 
 
-Before you submit the pull request, ensure that your changes in your fork builds and tests run with the latest changes from upstream. To sync the changes from the main repository into your fork you can follow the instructions here <https://help.github.com/articles/syncing-a-fork/>
+Before you submit the pull request, ensure that your changes in your fork builds and tests run with the latest changes from upstream. To sync the changes from the main repository into your fork you can follow the instructions [here](https://help.github.com/articles/syncing-a-fork/)
 
