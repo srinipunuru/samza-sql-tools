@@ -1,11 +1,17 @@
 package com.linkedin.samza.tools.avro;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericDatumReader;
+import org.apache.avro.generic.GenericDatumWriter;
 import org.apache.avro.generic.GenericRecord;
+import org.apache.avro.generic.IndexedRecord;
 import org.apache.avro.io.BinaryDecoder;
+import org.apache.avro.io.DatumWriter;
 import org.apache.avro.io.DecoderFactory;
+import org.apache.avro.io.Encoder;
+import org.apache.avro.io.EncoderFactory;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.samza.SamzaException;
 import org.apache.samza.config.Config;
@@ -42,8 +48,22 @@ public class AvroSerDeFactory implements SerdeFactory {
 
     @Override
     public byte[] toBytes(Object o) {
-      throw new NotImplementedException();
+      GenericRecord record = (GenericRecord) o;
+      try {
+        return encodeAvroGenericRecord(schema, record);
+      } catch (IOException e) {
+        throw new SamzaException("Unable to serialize the record", e);
+      }
     }
+  }
+
+  private byte[] encodeAvroGenericRecord(Schema schema, GenericRecord record) throws IOException {
+    DatumWriter<IndexedRecord> msgDatumWriter = new GenericDatumWriter<>(schema);
+    ByteArrayOutputStream os = new ByteArrayOutputStream();
+    Encoder encoder = EncoderFactory.get().binaryEncoder(os, null);
+    msgDatumWriter.write(record, encoder);
+    encoder.flush();
+    return os.toByteArray();
   }
 
   private static <T> T genericRecordFromBytes(byte[] bytes, Schema schema) throws IOException {
