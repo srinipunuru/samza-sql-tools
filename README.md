@@ -67,9 +67,9 @@ You can follow below instructions on how to use Generate kafka events tool.
 
 # Usage of the tool
 
-./scripts/generate-events.sh
+./scripts/generate-kafka-events.sh
 usage: Error: Missing required options: t, e
-              generate-events.sh
+              generate-kafka-events.sh
  -b,--broker <BROKER>               Kafka broker endpoint Default (localhost:9092).
  -n,--numEvents <NUM_EVENTS>        Number of events to be produced, 
                                     Default - Produces events continuously every second.
@@ -81,12 +81,12 @@ usage: Error: Missing required options: t, e
 
 # Example command to generate 100 events of type PageViewEvent into topic named PageViewStream
 
- ./scripts/generate-events.sh -t PageViewStream -e PageView -n 100
+ ./scripts/generate-kafka-events.sh -t PageViewStream -e PageView -n 100
 
 
 # Example command to generate ProfileChange events continuously into topic named ProfileChangeStream
 
- ./scripts/generate-events.sh -t ProfileChangeStream -e ProfileChange 
+ ./scripts/generate-kafka-events.sh -t ProfileChangeStream -e ProfileChange 
 
 ```
 
