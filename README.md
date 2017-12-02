@@ -101,9 +101,9 @@ There are two ways to use the tool -
 
 Second option allows you to execute multiple sql statements, whereas the first one lets you execute one at a time.
 
-Samza SQL needs all the events in the topic to be uniform schema. And Samza SQL needs access to the schema corresponding to the events in a topic. Typically in an organization, there is a deployment of schema registry which maps topics to schemas. 
+Samza SQL needs all the events in the topic to be uniform schema. And it also needs access to the schema corresponding to the events in a topic. Typically in an organization, there is a deployment of schema registry which maps topics to schemas. 
 
-In the absence of schema registry, tool uses the convention to identify the schemas associated with the topic. If the topic name has string "page" it assumes the topic has PageViewEvents else ProfileChangeEvents. 
+In the absence of schema registry, Samza SQL console tool uses the convention to identify the schemas associated with the topic. If the topic name has string "page" it assumes the topic has PageViewEvents else ProfileChangeEvents. 
 
 ```shell
 
@@ -124,7 +124,7 @@ usage: Error: One of the (f or s) options needs to be set
 
 ### Event Hub Consumer
 
-This tool let's you consume events from the Microsoft EventHubs stream. This tool assumes that the payload of the events is String. 
+This tool lets you consume events from the Microsoft EventHubs stream. This tool assumes that the payload of the events is String. 
 
 ```shell
 
@@ -146,7 +146,7 @@ usage: Error: Missing required options: e, n, k, t
 
 ## Developing using Idea
 
-You can use intellij for developing datastream. You can build the intellij project files by running
+You can use intellij for developing. You can build the intellij project files by running
 
 ```shell
 ./gradlew idea
