@@ -11,7 +11,7 @@ Clone apache samza repository and build it by running the following comamnds
 # clone samza
 
 cd ~
-git clone git@github.com:apache/samza.git
+git clone https://github.com/apache/samza.git
 
 
 # Build samza
@@ -33,7 +33,7 @@ Clone the samza-sql-tools repository and build it
 # clone samza-sql-tools
 
 cd ~
-git clone git@github.com:srinipunuru/samza-sql-tools.git
+git clone https://github.com/srinipunuru/samza-sql-tools.git
 
 
 # build samza-sql-tools.
@@ -120,6 +120,29 @@ usage: Error: One of the (f or s) options needs to be set
 ./scripts/samza-sql-console --sql "Insert into log.consoleOutput select Name,OldCompany from ProfileChangeStream where NewCompany = 'LINKEDIN'"
 
 ```
+
+
+### Event Hub Consumer
+
+This tool let's you consume events from the Microsoft EventHubs stream. This tool assumes that the payload of the events is String. 
+
+```shell
+
+# Usage of the tool
+
+./scripts/eh-consumer.sh
+usage: Error: Missing required options: e, n, k, t
+              eh-console-consumer.sh
+ -e,--ehname <EVENTHUB_NAME>           Name of the event hub.
+ -k,--key <KEY_NAME>                   Name of the key.
+ -n,--namespace <EVENTHUB_NAMESPACE>   Namespace of the event hub.
+ -t,--token <TOKEN>                    Token corresponding to the key.
+
+ # Example command to consume from an event hub
+ ./scripts/eh-consumer.sh -e OutputStream -n srinieh1 -k <SasKeyName> -t <SasToken>
+
+```
+
 
 ## Developing using Idea
 

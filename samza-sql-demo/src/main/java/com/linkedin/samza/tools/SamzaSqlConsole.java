@@ -32,6 +32,7 @@ import org.apache.samza.sql.runner.SamzaSqlApplicationRunner;
 import org.apache.samza.sql.testutil.JsonUtil;
 import org.apache.samza.sql.testutil.SqlFileParser;
 import org.apache.samza.standalone.PassthroughJobCoordinatorFactory;
+import org.apache.samza.system.eventhub.EventHubSystemFactory;
 import org.apache.samza.system.kafka.KafkaSystemFactory;
 
 
@@ -49,6 +50,7 @@ public class SamzaSqlConsole {
 
   private static final String SAMZA_SYSTEM_KAFKA = "kafka";
   private static final String SAMZA_SYSTEM_LOG = "log";
+  private static final String SAMZA_SYSTEM_EVENTHUBS = "eh";
 
   public static void main(String[] args) {
     Options options = new Options();
@@ -132,6 +134,20 @@ public class SamzaSqlConsole {
     staticConfigs.put(avroSamzaSqlConfigPrefix + SqlSystemStreamConfig.CFG_SAMZA_REL_CONVERTER, "avro");
     staticConfigs.put(avroSamzaSqlConfigPrefix + SqlSystemStreamConfig.CFG_REL_SCHEMA_PROVIDER, "config");
 
+    String ehSystemConfigPrefix =
+        String.format(ConfigBasedSourceResolverFactory.CFG_FMT_SAMZA_PREFIX, SAMZA_SYSTEM_EVENTHUBS);
+    String ehSamzaSqlConfigPrefix = configSourceResolverDomain + String.format("%s.", SAMZA_SYSTEM_EVENTHUBS);
+    staticConfigs.put(ehSystemConfigPrefix + "samza.factory", EventHubSystemFactory.class.getName());
+    staticConfigs.put(ehSystemConfigPrefix + "stream.list", "OutputStream");
+    staticConfigs.put(ehSystemConfigPrefix + "streams.OutputStream.eventhubs.namespace", "srinieh1");
+    staticConfigs.put(ehSystemConfigPrefix + "streams.OutputStream.eventhubs.entitypath", "OutputStream");
+    staticConfigs.put(ehSystemConfigPrefix + "streams.OutputStream.eventhubs.sas.keyname", "WriteKey");
+    staticConfigs.put(ehSystemConfigPrefix + "streams.OutputStream.eventhubs.sas.token",
+        "BFMZOHEBLbukDJcuMrx1S9HjxjjUW3feXuuc4fhD7oA=");
+
+    staticConfigs.put(ehSamzaSqlConfigPrefix + SqlSystemStreamConfig.CFG_SAMZA_REL_CONVERTER, "json");
+    staticConfigs.put(ehSamzaSqlConfigPrefix + SqlSystemStreamConfig.CFG_REL_SCHEMA_PROVIDER, "config");
+
     String logSystemConfigPrefix =
         String.format(ConfigBasedSourceResolverFactory.CFG_FMT_SAMZA_PREFIX, SAMZA_SYSTEM_LOG);
     String logSamzaSqlConfigPrefix = configSourceResolverDomain + String.format("%s.", SAMZA_SYSTEM_LOG);
@@ -144,7 +160,7 @@ public class SamzaSqlConsole {
 //    staticConfigs.put(avroSamzaToRelMsgConverterDomain + SamzaSqlApplicationConfig.CFG_FACTORY,
 //        AvroRelConverterFactory.class.getName());
 
-        staticConfigs.put(avroSamzaToRelMsgConverterDomain + SamzaSqlApplicationConfig.CFG_FACTORY,
+    staticConfigs.put(avroSamzaToRelMsgConverterDomain + SamzaSqlApplicationConfig.CFG_FACTORY,
         AvroSchemaGenRelConverterFactory.class.getName());
 
     String jsonSamzaToRelMsgConverterDomain =

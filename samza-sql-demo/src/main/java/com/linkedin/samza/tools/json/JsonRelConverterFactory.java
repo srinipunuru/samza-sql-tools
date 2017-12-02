@@ -65,7 +65,7 @@ public class JsonRelConverterFactory implements SamzaRelConverterFactory {
         throw new SamzaException("Error json serializing object", e);
       }
 
-      return new KV<>(relMessage.getKey(), jsonValue);
+      return new KV<>(relMessage.getKey(), jsonValue.getBytes());
     }
   }
 }

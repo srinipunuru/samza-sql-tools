@@ -60,7 +60,7 @@ public class ConsoleLoggingSystemFactory implements SystemFactory {
     @Override
     public void send(String source, OutgoingMessageEnvelope envelope) {
       String msg = String.format("OutputStream:%s Key:%s Value:%s", envelope.getSystemStream(), envelope.getKey(),
-          envelope.getMessage());
+          new String((byte[]) envelope.getMessage()));
       LOG.info(msg);
       System.out.println(msg);
     }

@@ -64,6 +64,7 @@ project(':samza-sql-demo') {
     compile "org.apache.kafka:kafka-clients:$kafkaVersion"
     compile "org.apache.samza:samza-sql:$samzaVersion"
     compile "org.apache.samza:samza-api:$samzaVersion"
+    compile "org.apache.samza:samza-azure:$samzaVersion"
   }
 
   tasks.create(name: "releaseTarGz", dependsOn: configurations.archives.artifacts, type: Tar) {
