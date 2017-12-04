@@ -38,6 +38,7 @@ git clone https://github.com/srinipunuru/samza-sql-tools.git
 
 # build samza-sql-tools.
 
+cd samza-sql-tools
 ./gradlew clean releaseTarGz
 
 ```
@@ -105,6 +106,8 @@ Samza SQL needs all the events in the topic to be uniform schema. And it also ne
 
 In the absence of schema registry, Samza SQL console tool uses the convention to identify the schemas associated with the topic. If the topic name has string "page" it assumes the topic has PageViewEvents else ProfileChangeEvents. 
 
+Would be useful to briefly describe the mechanism by which Samza SQL leverages a schema registry. e.g. Does it rely on the Samza System & Serde abstractions or does it interact more directly with the registry?
+
 ```shell
 
 # Usage of the tool
@@ -117,12 +120,15 @@ usage: Error: One of the (f or s) options needs to be set
 
 # Example command to filter out all the users who have moved to LinkedIn
 
-./scripts/samza-sql-console --sql "Insert into log.consoleOutput select Name,OldCompany from ProfileChangeStream where NewCompany = 'LINKEDIN'"
+./scripts/samza-sql-console.sh --sql "Insert into log.consoleOutput select Name,OldCompany from ProfileChangeStream where NewCompany = 'LINKEDIN'"
 
 ```
 
+Here would be a good place to reference any documented samples of other queries so users can get a feel for what they can do with Samza SQL.
 
 ### Event Hub Consumer
+
+This feels out of place. It comes out of nowhere and the reader may wonder why they care about Event Hubs in the context of Samza SQL. It's also unclear how it works. Does it emit the EH events to a Kafka topic that Samza SQL can then consume?
 
 This tool lets you consume events from the Microsoft EventHubs stream. This tool assumes that the payload of the events is String. 
 
