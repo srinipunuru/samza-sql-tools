@@ -134,19 +134,19 @@ public class SamzaSqlConsole {
     staticConfigs.put(avroSamzaSqlConfigPrefix + SqlSystemStreamConfig.CFG_SAMZA_REL_CONVERTER, "avro");
     staticConfigs.put(avroSamzaSqlConfigPrefix + SqlSystemStreamConfig.CFG_REL_SCHEMA_PROVIDER, "config");
 
-    String ehSystemConfigPrefix =
-        String.format(ConfigBasedSourceResolverFactory.CFG_FMT_SAMZA_PREFIX, SAMZA_SYSTEM_EVENTHUBS);
-    String ehSamzaSqlConfigPrefix = configSourceResolverDomain + String.format("%s.", SAMZA_SYSTEM_EVENTHUBS);
-    staticConfigs.put(ehSystemConfigPrefix + "samza.factory", EventHubSystemFactory.class.getName());
-    staticConfigs.put(ehSystemConfigPrefix + "stream.list", "OutputStream");
-    staticConfigs.put(ehSystemConfigPrefix + "streams.OutputStream.eventhubs.namespace", "srinieh1");
-    staticConfigs.put(ehSystemConfigPrefix + "streams.OutputStream.eventhubs.entitypath", "OutputStream");
-    staticConfigs.put(ehSystemConfigPrefix + "streams.OutputStream.eventhubs.sas.keyname", "WriteKey");
-    staticConfigs.put(ehSystemConfigPrefix + "streams.OutputStream.eventhubs.sas.token",
-        "BFMZOHEBLbukDJcuMrx1S9HjxjjUW3feXuuc4fhD7oA=");
-
-    staticConfigs.put(ehSamzaSqlConfigPrefix + SqlSystemStreamConfig.CFG_SAMZA_REL_CONVERTER, "json");
-    staticConfigs.put(ehSamzaSqlConfigPrefix + SqlSystemStreamConfig.CFG_REL_SCHEMA_PROVIDER, "config");
+//    String ehSystemConfigPrefix =
+//        String.format(ConfigBasedSourceResolverFactory.CFG_FMT_SAMZA_PREFIX, SAMZA_SYSTEM_EVENTHUBS);
+//    String ehSamzaSqlConfigPrefix = configSourceResolverDomain + String.format("%s.", SAMZA_SYSTEM_EVENTHUBS);
+//    staticConfigs.put(ehSystemConfigPrefix + "samza.factory", EventHubSystemFactory.class.getName());
+//    staticConfigs.put(ehSystemConfigPrefix + "stream.list", "OutputStream");
+//    staticConfigs.put(ehSystemConfigPrefix + "streams.OutputStream.eventhubs.namespace", "srinieh1");
+//    staticConfigs.put(ehSystemConfigPrefix + "streams.OutputStream.eventhubs.entitypath", "OutputStream");
+//    staticConfigs.put(ehSystemConfigPrefix + "streams.OutputStream.eventhubs.sas.keyname", "WriteKey");
+//    staticConfigs.put(ehSystemConfigPrefix + "streams.OutputStream.eventhubs.sas.token",
+//        "BFMZOHEBLbukDJcuMrx1S9HjxjjUW3feXuuc4fhD7oA=");
+//
+//    staticConfigs.put(ehSamzaSqlConfigPrefix + SqlSystemStreamConfig.CFG_SAMZA_REL_CONVERTER, "json");
+//    staticConfigs.put(ehSamzaSqlConfigPrefix + SqlSystemStreamConfig.CFG_REL_SCHEMA_PROVIDER, "config");
 
     String logSystemConfigPrefix =
         String.format(ConfigBasedSourceResolverFactory.CFG_FMT_SAMZA_PREFIX, SAMZA_SYSTEM_LOG);
