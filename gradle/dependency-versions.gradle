@@ -9,5 +9,5 @@ ext {
     testngVersion = "6.4"
     commonslang3Version = "3.4"
     kafkaVersion = "0.10.1.1"
-    samzaVersion = "0.14.0"
+    samzaVersion = "0.13.1-SNAPSHOT"
 }

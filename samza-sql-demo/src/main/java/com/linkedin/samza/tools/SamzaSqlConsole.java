@@ -117,7 +117,7 @@ public class SamzaSqlConsole {
 
     staticConfigs.put("serializers.registry.string.class", StringSerdeFactory.class.getName());
     staticConfigs.put("serializers.registry.avro.class", AvroSerDeFactory.class.getName());
-    staticConfigs.put(AvroSerDeFactory.CFG_AVRO_SCHEMA, PageViewEvent.SCHEMA$.toString());
+    staticConfigs.put(AvroSerDeFactory.CFG_AVRO_SCHEMA, ProfileChangeEvent.SCHEMA$.toString());
 
     String kafkaSystemConfigPrefix =
         String.format(ConfigBasedSourceResolverFactory.CFG_FMT_SAMZA_PREFIX, SAMZA_SYSTEM_KAFKA);
