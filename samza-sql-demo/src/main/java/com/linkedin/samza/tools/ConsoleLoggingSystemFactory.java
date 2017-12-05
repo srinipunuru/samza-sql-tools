@@ -62,7 +62,13 @@ public class ConsoleLoggingSystemFactory implements SystemFactory {
       String msg = String.format("OutputStream:%s Key:%s Value:%s", envelope.getSystemStream(), envelope.getKey(),
           new String((byte[]) envelope.getMessage()));
       LOG.info(msg);
-      System.out.println(msg);
+
+      if (envelope.getKey() != null) {
+        System.out.println(String.format("Key:%s Value:%s", envelope.getKey(),
+            new String((byte[]) envelope.getMessage())));
+      } else {
+        System.out.println(new String((byte[]) envelope.getMessage()));
+      }
     }
 
     @Override

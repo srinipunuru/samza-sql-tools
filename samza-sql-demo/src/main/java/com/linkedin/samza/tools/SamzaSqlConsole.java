@@ -7,6 +7,8 @@ import com.linkedin.samza.tools.json.JsonRelConverterFactory;
 import com.linkedin.samza.tools.schemas.PageViewEvent;
 import com.linkedin.samza.tools.schemas.ProfileChangeEvent;
 import com.linkedin.samza.tools.schemas.SimpleRecord;
+import com.linkedin.samza.tools.udf.RegexMatchUdf;
+import com.linkedin.samza.tools.udf.StringContainsUdf;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -112,12 +114,12 @@ public class SamzaSqlConsole {
     String configUdfResolverDomain = String.format(SamzaSqlApplicationConfig.CFG_FMT_UDF_RESOLVER_DOMAIN, "config");
     staticConfigs.put(configUdfResolverDomain + SamzaSqlApplicationConfig.CFG_FACTORY,
         ConfigBasedUdfResolver.class.getName());
-    staticConfigs.put(configUdfResolverDomain + ConfigBasedUdfResolver.CFG_UDF_CLASSES,
-        Joiner.on(",").join(StringContainsUdf.class.getName(), FlattenUdf.class.getName()));
+    staticConfigs.put(configUdfResolverDomain + ConfigBasedUdfResolver.CFG_UDF_CLASSES, Joiner.on(",")
+        .join(StringContainsUdf.class.getName(), FlattenUdf.class.getName(), RegexMatchUdf.class.getName()));
 
     staticConfigs.put("serializers.registry.string.class", StringSerdeFactory.class.getName());
     staticConfigs.put("serializers.registry.avro.class", AvroSerDeFactory.class.getName());
-    staticConfigs.put(AvroSerDeFactory.CFG_AVRO_SCHEMA, PageViewEvent.SCHEMA$.toString());
+    staticConfigs.put(AvroSerDeFactory.CFG_AVRO_SCHEMA, ProfileChangeEvent.SCHEMA$.toString());
 
     String kafkaSystemConfigPrefix =
         String.format(ConfigBasedSourceResolverFactory.CFG_FMT_SAMZA_PREFIX, SAMZA_SYSTEM_KAFKA);

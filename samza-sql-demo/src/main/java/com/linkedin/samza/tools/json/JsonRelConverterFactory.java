@@ -56,7 +56,7 @@ public class JsonRelConverterFactory implements SamzaRelConverterFactory {
         } else if (String.class.isAssignableFrom(value.getClass())) {
           node.put(fieldNames.get(index), (String) value);
         } else {
-          throw new SamzaException("Unsupported field type" + value.getClass());
+          node.put(fieldNames.get(index), value.toString());
         }
       }
       try {
