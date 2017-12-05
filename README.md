@@ -117,7 +117,7 @@ usage: Error: One of the (f or s) options needs to be set
 
 # Example command to filter out all the users who have moved to LinkedIn
 
-./scripts/samza-sql-console --sql "Insert into log.consoleOutput select Name,OldCompany from ProfileChangeStream where NewCompany = 'LINKEDIN'"
+./scripts/samza-sql-console --sql "Insert into log.consoleOutput select Name, OldCompany from kafka.ProfileChangeStream where NewCompany = 'LinkedIn'"
 
 ```
 
