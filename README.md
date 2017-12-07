@@ -90,6 +90,13 @@ usage: Error: Missing required options: t, e
 
 ```
 
+Please run the below command to start generating events that will be used by the Samza SQL demo
+
+```shell
+ ./scripts/generate-kafka-events.sh -t ProfileChangeStream -e ProfileChange
+
+```
+
 ### Samza SQL console tool
 
 Once you generated the events into the kafka topic. Now you can use samza-sql-console tool to perform processing on the events published into the kafka topic.
@@ -117,6 +124,13 @@ usage: Error: One of the (f or s) options needs to be set
 
 # Example command to filter out all the users who have moved to LinkedIn
 
+./scripts/samza-sql-console.sh --sql "Insert into log.consoleOutput select Name, OldCompany from kafka.ProfileChangeStream where NewCompany = 'LinkedIn'"
+
+```
+
+You can run below sql commands using Samza sql console. Please make sure you are running generate-kafka-events tool to generate events into ProfileChangeStream before running the below command.
+
+```shell
 ./scripts/samza-sql-console.sh --sql "Insert into log.consoleOutput select Name, OldCompany from kafka.ProfileChangeStream where NewCompany = 'LinkedIn'"
 
 ```

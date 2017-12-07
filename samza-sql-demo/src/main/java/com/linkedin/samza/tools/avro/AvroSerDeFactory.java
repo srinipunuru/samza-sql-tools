@@ -19,6 +19,9 @@ import org.apache.samza.serializers.Serde;
 import org.apache.samza.serializers.SerdeFactory;
 
 
+/**
+ * Avro SerDe that can be used to serialize or deserialize the avro {@link GenericRecord}.
+ */
 public class AvroSerDeFactory implements SerdeFactory {
 
   public static String CFG_AVRO_SCHEMA = "serializers.avro.schema";
@@ -37,7 +40,7 @@ public class AvroSerDeFactory implements SerdeFactory {
 
     @Override
     public Object fromBytes(byte[] bytes) {
-      GenericRecord record = null;
+      GenericRecord record;
       try {
         record = genericRecordFromBytes(bytes, schema);
       } catch (IOException e) {

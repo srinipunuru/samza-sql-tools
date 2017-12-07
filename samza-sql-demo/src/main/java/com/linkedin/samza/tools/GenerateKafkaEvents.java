@@ -25,20 +25,12 @@ import org.apache.kafka.common.serialization.ByteArraySerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class GenerateKafkaEvents {
 
   private static final String OPT_SHORT_TOPIC_NAME = "t";
   private static final String OPT_LONG_TOPIC_NAME = "topic";
   private static final String OPT_ARG_TOPIC_NAME = "TOPIC_NAME";
   private static final String OPT_DESC_TOPIC_NAME = "Name of the topic to write events to.";
-
-  private static final String DEFAULT_NUM_PARTITIONS = "4";
-  private static final String OPT_SHORT_NUM_PARTITIONS = "p";
-  private static final String OPT_LONG_NUM_PARTITIONS = "partitions";
-  private static final String OPT_ARG_NUM_PARTITIONS = "NUM_PARTITIONS";
-  private static final String OPT_DESC_NUM_PARTITIONS =
-      String.format("Number of partitions in the topic, Default (%s).", DEFAULT_NUM_PARTITIONS);
 
   private static final String OPT_SHORT_BROKER = "b";
   private static final String OPT_LONG_BROKER = "broker";
@@ -54,7 +46,8 @@ public class GenerateKafkaEvents {
   private static final String OPT_SHORT_EVENT_TYPE = "e";
   private static final String OPT_LONG_EVENT_TYPE = "eventtype";
   private static final String OPT_ARG_EVENT_TYPE = "EVENT_TYPE";
-  private static final String OPT_DESC_EVENT_TYPE = "Type of the event (PageView|ProfileChange) Default(ProfileChange).";
+  private static final String OPT_DESC_EVENT_TYPE =
+      "Type of the event (PageView|ProfileChange) Default(ProfileChange).";
 
   private static final Logger LOG = LoggerFactory.getLogger(GenerateKafkaEvents.class);
   private static RandomValueGenerator _randValueGenerator;
@@ -62,25 +55,22 @@ public class GenerateKafkaEvents {
   private static String[] companies =
       new String[]{"Microsoft", "LinkedIn", "Google", "Facebook", "Amazon", "Apple", "Twitter", "Snap"};
 
-  private static final String PAGEVIEW_TOPICNAME = "page";
+  private static final String PAGEVIEW_EVENTTYPE = "pageview";
 
   public static void main(String[] args) throws UnsupportedEncodingException, InterruptedException {
     _randValueGenerator = new RandomValueGenerator(System.currentTimeMillis());
     Options options = new Options();
     options.addOption(
-        Utils.createOption(OPT_SHORT_TOPIC_NAME, OPT_LONG_TOPIC_NAME, OPT_ARG_TOPIC_NAME, true, OPT_DESC_TOPIC_NAME));
+        CommandLineHelper.createOption(OPT_SHORT_TOPIC_NAME, OPT_LONG_TOPIC_NAME, OPT_ARG_TOPIC_NAME, true, OPT_DESC_TOPIC_NAME));
 
     options.addOption(
-        Utils.createOption(OPT_SHORT_NUM_PARTITIONS, OPT_LONG_NUM_PARTITIONS, OPT_ARG_NUM_PARTITIONS, false,
-            OPT_DESC_NUM_PARTITIONS));
-
-    options.addOption(Utils.createOption(OPT_SHORT_BROKER, OPT_LONG_BROKER, OPT_ARG_BROKER, false, OPT_DESC_BROKER));
+        CommandLineHelper.createOption(OPT_SHORT_BROKER, OPT_LONG_BROKER, OPT_ARG_BROKER, false, OPT_DESC_BROKER));
 
     options.addOption(
-        Utils.createOption(OPT_SHORT_NUM_EVENTS, OPT_LONG_NUM_EVENTS, OPT_ARG_NUM_EVENTS, false, OPT_DESC_NUM_EVENTS));
+        CommandLineHelper.createOption(OPT_SHORT_NUM_EVENTS, OPT_LONG_NUM_EVENTS, OPT_ARG_NUM_EVENTS, false, OPT_DESC_NUM_EVENTS));
 
     options.addOption(
-        Utils.createOption(OPT_SHORT_EVENT_TYPE, OPT_LONG_EVENT_TYPE, OPT_ARG_EVENT_TYPE, false, OPT_DESC_EVENT_TYPE));
+        CommandLineHelper.createOption(OPT_SHORT_EVENT_TYPE, OPT_LONG_EVENT_TYPE, OPT_ARG_EVENT_TYPE, false, OPT_DESC_EVENT_TYPE));
 
     CommandLineParser parser = new BasicParser();
     CommandLine cmd;
@@ -94,26 +84,10 @@ public class GenerateKafkaEvents {
 
     String topicName = cmd.getOptionValue(OPT_SHORT_TOPIC_NAME);
     String broker = cmd.getOptionValue(OPT_SHORT_BROKER, DEFAULT_BROKER);
-    long numEvents = Long.parseLong(cmd.getOptionValue(OPT_SHORT_NUM_EVENTS, "-1"));
+    long numEvents = Long.parseLong(cmd.getOptionValue(OPT_SHORT_NUM_EVENTS, String.valueOf(Long.MAX_VALUE)));
     String eventType = cmd.getOptionValue(OPT_SHORT_EVENT_TYPE);
-//    int numPartitions = Integer.parseInt(cmd.getOptionValue(OPT_SHORT_NUM_PARTITIONS, DEFAULT_NUM_PARTITIONS));
-//    createTopicIfNotExists(broker, topicName, numPartitions);
     generateEvents(broker, topicName, eventType, numEvents);
   }
-
-//  private static void createTopicIfNotExists(String brokers, String topic, int numPartitions) {
-//    Properties props = new Properties();
-//    props.put("bootstrap.servers", brokers);
-//
-//
-//    AdminClient adminClient = AdminClient.create(props);
-//    try {
-//      adminClient.describeTopics(Collections.singletonList(topic));
-//    } catch (InvalidTopicException e) {
-//      adminClient.createTopics(Collections.singletonList(new NewTopic(topic, numPartitions, (short) 1)));
-//    }
-//    adminClient.close();
-//  }
 
   private static void generateEvents(String brokers, String topicName, String eventType, long numEvents)
       throws UnsupportedEncodingException, InterruptedException {
@@ -125,13 +99,16 @@ public class GenerateKafkaEvents {
     props.put("value.serializer", ByteArraySerializer.class.getCanonicalName());
 
     Function<Integer, Pair<String, byte[]>> eventGenerator;
-    if (eventType.toLowerCase().contains(PAGEVIEW_TOPICNAME)) {
+    if (eventType.toLowerCase().contains(PAGEVIEW_EVENTTYPE)) {
       eventGenerator = GenerateKafkaEvents::generatePageViewEvent;
     } else {
       eventGenerator = GenerateKafkaEvents::generateProfileChangeEvent;
     }
-    if (numEvents < 0) {
-      numEvents = Long.MAX_VALUE;
+
+    boolean doSleep = false;
+    // sleep only when the events have to be produced continuously.
+    if (numEvents == Long.MAX_VALUE) {
+      doSleep = true;
     }
 
     try (Producer<byte[], byte[]> producer = new KafkaProducer<>(props)) {
@@ -147,7 +124,9 @@ public class GenerateKafkaEvents {
               }
             });
         System.out.println(String.format("Published event %d to topic %s", index, topicName));
-        Thread.sleep(1000);
+        if (doSleep) {
+          Thread.sleep(1000);
+        }
       }
 
       producer.flush();

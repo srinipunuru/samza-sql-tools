@@ -9,6 +9,9 @@ import org.apache.samza.sql.interfaces.SamzaRelConverterFactory;
 import org.apache.samza.system.SystemStream;
 
 
+/**
+ * Factory for {@link AvroSchemaGenRelConverter}
+ */
 public class AvroSchemaGenRelConverterFactory implements SamzaRelConverterFactory {
 
   private final HashMap<SystemStream, SamzaRelConverter> relConverters = new HashMap<>();

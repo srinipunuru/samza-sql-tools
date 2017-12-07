@@ -14,7 +14,9 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 
-
+/**
+ * Tool to read events from Microsoft Azure event hubs.
+ */
 public class EventHubConsoleConsumer {
 
   private static final String OPT_SHORT_EVENTHUB_NAME = "e";
@@ -40,16 +42,18 @@ public class EventHubConsoleConsumer {
   public static void main(String[] args)
       throws ServiceBusException, IOException, ExecutionException, InterruptedException {
     Options options = new Options();
-    options.addOption(Utils.createOption(OPT_SHORT_EVENTHUB_NAME, OPT_LONG_EVENTHUB_NAME, OPT_ARG_EVENTHUB_NAME, true,
+    options.addOption(
+        CommandLineHelper.createOption(OPT_SHORT_EVENTHUB_NAME, OPT_LONG_EVENTHUB_NAME, OPT_ARG_EVENTHUB_NAME, true,
         OPT_DESC_EVENTHUB_NAME));
 
     options.addOption(
-        Utils.createOption(OPT_SHORT_NAMESPACE, OPT_LONG_NAMESPACE, OPT_ARG_NAMESPACE, true, OPT_DESC_NAMESPACE));
+        CommandLineHelper.createOption(OPT_SHORT_NAMESPACE, OPT_LONG_NAMESPACE, OPT_ARG_NAMESPACE, true, OPT_DESC_NAMESPACE));
 
     options.addOption(
-        Utils.createOption(OPT_SHORT_KEY_NAME, OPT_LONG_KEY_NAME, OPT_ARG_KEY_NAME, true, OPT_DESC_KEY_NAME));
+        CommandLineHelper.createOption(OPT_SHORT_KEY_NAME, OPT_LONG_KEY_NAME, OPT_ARG_KEY_NAME, true, OPT_DESC_KEY_NAME));
 
-    options.addOption(Utils.createOption(OPT_SHORT_TOKEN, OPT_LONG_TOKEN, OPT_ARG_TOKEN, true, OPT_DESC_TOKEN));
+    options.addOption(
+        CommandLineHelper.createOption(OPT_SHORT_TOKEN, OPT_LONG_TOKEN, OPT_ARG_TOKEN, true, OPT_DESC_TOKEN));
 
     CommandLineParser parser = new BasicParser();
     CommandLine cmd;

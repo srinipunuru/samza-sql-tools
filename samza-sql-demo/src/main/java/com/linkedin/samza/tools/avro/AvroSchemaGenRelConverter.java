@@ -1,8 +1,6 @@
 package com.linkedin.samza.tools.avro;
 
-import com.linkedin.samza.tools.schemas.TestClass;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,18 +16,19 @@ import org.apache.samza.sql.data.SamzaSqlRelMessage;
 import org.apache.samza.system.SystemStream;
 
 
+/**
+ * Special form for AvroRelConverter that generates the avro schema on the output based on the
+ * fields in {@link SamzaSqlRelMessage} and uses the schema to serialize the output.
+ * This is useful to test out the SQL quickly when the destination system supports Avro serialized data,
+ * without having to manually author the avro schemas for various SQL queries.
+ */
 public class AvroSchemaGenRelConverter extends AvroRelConverter {
 
-  private final Schema arraySchema;
-  private final Schema mapSchema;
   private final String streamName;
   private Map<String, Schema> _schemas = new HashMap<>();
 
   public AvroSchemaGenRelConverter(SystemStream systemStream, AvroRelSchemaProvider schemaProvider, Config config) {
     super(systemStream, schemaProvider, config);
-    Schema testClassSchema = ReflectData.get().getSchema(TestClass.class);
-    arraySchema = testClassSchema.getField("arrayValue").schema();
-    mapSchema = testClassSchema.getField("mapValue").schema();
     streamName = systemStream.getStream();
   }
 
@@ -60,10 +59,6 @@ public class AvroSchemaGenRelConverter extends AvroRelConverter {
       Schema avroType;
       if (value instanceof GenericData.Record) {
         avroType = ((GenericData.Record) value).getSchema();
-      } else if (value instanceof Collection) {
-        avroType = arraySchema;
-      } else if (value instanceof Map) {
-        avroType = mapSchema;
       } else {
         avroType = ReflectData.get().getSchema(value.getClass());
       }

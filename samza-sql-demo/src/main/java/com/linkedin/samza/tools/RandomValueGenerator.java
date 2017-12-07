@@ -3,6 +3,9 @@ package com.linkedin.samza.tools;
 import java.util.Random;
 
 
+/**
+ * Simple utility to generate random values.
+ */
 public class RandomValueGenerator {
 
   private String validChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

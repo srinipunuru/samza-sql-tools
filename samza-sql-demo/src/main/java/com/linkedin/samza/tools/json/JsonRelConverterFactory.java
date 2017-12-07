@@ -15,6 +15,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
 
 
+/**
+ * SamzaRelConverter that can convert {@link SamzaSqlRelMessage} to json string byte array.
+ */
 public class JsonRelConverterFactory implements SamzaRelConverterFactory {
 
   ObjectMapper mapper = new ObjectMapper();
@@ -56,7 +59,7 @@ public class JsonRelConverterFactory implements SamzaRelConverterFactory {
         } else if (String.class.isAssignableFrom(value.getClass())) {
           node.put(fieldNames.get(index), (String) value);
         } else {
-          throw new SamzaException("Unsupported field type" + value.getClass());
+          node.put(fieldNames.get(index), value.toString());
         }
       }
       try {

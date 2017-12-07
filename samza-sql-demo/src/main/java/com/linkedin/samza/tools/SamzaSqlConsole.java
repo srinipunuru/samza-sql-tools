@@ -6,7 +6,7 @@ import com.linkedin.samza.tools.avro.AvroSerDeFactory;
 import com.linkedin.samza.tools.json.JsonRelConverterFactory;
 import com.linkedin.samza.tools.schemas.PageViewEvent;
 import com.linkedin.samza.tools.schemas.ProfileChangeEvent;
-import com.linkedin.samza.tools.schemas.SimpleRecord;
+import com.linkedin.samza.tools.udf.RegexMatchUdf;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +32,6 @@ import org.apache.samza.sql.runner.SamzaSqlApplicationRunner;
 import org.apache.samza.sql.testutil.JsonUtil;
 import org.apache.samza.sql.testutil.SqlFileParser;
 import org.apache.samza.standalone.PassthroughJobCoordinatorFactory;
-import org.apache.samza.system.eventhub.EventHubSystemFactory;
 import org.apache.samza.system.kafka.KafkaSystemFactory;
 
 
@@ -50,14 +49,13 @@ public class SamzaSqlConsole {
 
   private static final String SAMZA_SYSTEM_KAFKA = "kafka";
   private static final String SAMZA_SYSTEM_LOG = "log";
-  private static final String SAMZA_SYSTEM_EVENTHUBS = "eh";
 
   public static void main(String[] args) {
     Options options = new Options();
     options.addOption(
-        Utils.createOption(OPT_SHORT_SQL_FILE, OPT_LONG_SQL_FILE, OPT_ARG_SQL_FILE, false, OPT_DESC_SQL_FILE));
+        CommandLineHelper.createOption(OPT_SHORT_SQL_FILE, OPT_LONG_SQL_FILE, OPT_ARG_SQL_FILE, false, OPT_DESC_SQL_FILE));
     options.addOption(
-        Utils.createOption(OPT_SHORT_SQL_STMT, OPT_LONG_SQL_STMT, OPT_ARG_SQL_STMT, false, OPT_DESC_SQL_STMT));
+        CommandLineHelper.createOption(OPT_SHORT_SQL_STMT, OPT_LONG_SQL_STMT, OPT_ARG_SQL_STMT, false, OPT_DESC_SQL_STMT));
 
     CommandLineParser parser = new BasicParser();
     CommandLine cmd;
@@ -113,7 +111,7 @@ public class SamzaSqlConsole {
     staticConfigs.put(configUdfResolverDomain + SamzaSqlApplicationConfig.CFG_FACTORY,
         ConfigBasedUdfResolver.class.getName());
     staticConfigs.put(configUdfResolverDomain + ConfigBasedUdfResolver.CFG_UDF_CLASSES,
-        Joiner.on(",").join(StringContainsUdf.class.getName(), FlattenUdf.class.getName()));
+        Joiner.on(",").join(RegexMatchUdf.class.getName(), FlattenUdf.class.getName()));
 
     staticConfigs.put("serializers.registry.string.class", StringSerdeFactory.class.getName());
     staticConfigs.put("serializers.registry.avro.class", AvroSerDeFactory.class.getName());
@@ -134,20 +132,6 @@ public class SamzaSqlConsole {
     staticConfigs.put(avroSamzaSqlConfigPrefix + SqlSystemStreamConfig.CFG_SAMZA_REL_CONVERTER, "avro");
     staticConfigs.put(avroSamzaSqlConfigPrefix + SqlSystemStreamConfig.CFG_REL_SCHEMA_PROVIDER, "config");
 
-//    String ehSystemConfigPrefix =
-//        String.format(ConfigBasedSourceResolverFactory.CFG_FMT_SAMZA_PREFIX, SAMZA_SYSTEM_EVENTHUBS);
-//    String ehSamzaSqlConfigPrefix = configSourceResolverDomain + String.format("%s.", SAMZA_SYSTEM_EVENTHUBS);
-//    staticConfigs.put(ehSystemConfigPrefix + "samza.factory", EventHubSystemFactory.class.getName());
-//    staticConfigs.put(ehSystemConfigPrefix + "stream.list", "OutputStream");
-//    staticConfigs.put(ehSystemConfigPrefix + "streams.OutputStream.eventhubs.namespace", "srinieh1");
-//    staticConfigs.put(ehSystemConfigPrefix + "streams.OutputStream.eventhubs.entitypath", "OutputStream");
-//    staticConfigs.put(ehSystemConfigPrefix + "streams.OutputStream.eventhubs.sas.keyname", "WriteKey");
-//    staticConfigs.put(ehSystemConfigPrefix + "streams.OutputStream.eventhubs.sas.token",
-//        "BFMZOHEBLbukDJcuMrx1S9HjxjjUW3feXuuc4fhD7oA=");
-//
-//    staticConfigs.put(ehSamzaSqlConfigPrefix + SqlSystemStreamConfig.CFG_SAMZA_REL_CONVERTER, "json");
-//    staticConfigs.put(ehSamzaSqlConfigPrefix + SqlSystemStreamConfig.CFG_REL_SCHEMA_PROVIDER, "config");
-
     String logSystemConfigPrefix =
         String.format(ConfigBasedSourceResolverFactory.CFG_FMT_SAMZA_PREFIX, SAMZA_SYSTEM_LOG);
     String logSamzaSqlConfigPrefix = configSourceResolverDomain + String.format("%s.", SAMZA_SYSTEM_LOG);
@@ -157,8 +141,6 @@ public class SamzaSqlConsole {
 
     String avroSamzaToRelMsgConverterDomain =
         String.format(SamzaSqlApplicationConfig.CFG_FMT_SAMZA_REL_CONVERTER_DOMAIN, "avro");
-//    staticConfigs.put(avroSamzaToRelMsgConverterDomain + SamzaSqlApplicationConfig.CFG_FACTORY,
-//        AvroRelConverterFactory.class.getName());
 
     staticConfigs.put(avroSamzaToRelMsgConverterDomain + SamzaSqlApplicationConfig.CFG_FACTORY,
         AvroSchemaGenRelConverterFactory.class.getName());
@@ -177,14 +159,6 @@ public class SamzaSqlConsole {
     staticConfigs.put(
         configAvroRelSchemaProviderDomain + String.format(ConfigBasedAvroRelSchemaProviderFactory.CFG_SOURCE_SCHEMA,
             "kafka", "PageViewStream"), PageViewEvent.SCHEMA$.toString());
-
-    staticConfigs.put(
-        configAvroRelSchemaProviderDomain + String.format(ConfigBasedAvroRelSchemaProviderFactory.CFG_SOURCE_SCHEMA,
-            "kafka", "out"), SimpleRecord.SCHEMA$.toString());
-
-    staticConfigs.put(
-        configAvroRelSchemaProviderDomain + String.format(ConfigBasedAvroRelSchemaProviderFactory.CFG_SOURCE_SCHEMA,
-            "log", "outputStream"), SimpleRecord.SCHEMA$.toString());
 
     staticConfigs.put(
         configAvroRelSchemaProviderDomain + String.format(ConfigBasedAvroRelSchemaProviderFactory.CFG_SOURCE_SCHEMA,
